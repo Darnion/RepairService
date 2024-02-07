@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RepairService.Context.Models
 {
@@ -7,5 +8,6 @@ namespace RepairService.Context.Models
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

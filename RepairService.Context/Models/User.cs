@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RepairService.Context.Models
@@ -14,5 +15,11 @@ namespace RepairService.Context.Models
         public string Login { get; set; }
         [Required]
         public string Password { get; set; }
+        public ICollection<Order> OrderClients { get; set; }
+        public ICollection<Order> OrderWorkers { get; set; }
+        public User()
+        {
+            OrderWorkers = new HashSet<Order>();
+        }
     }
 }
