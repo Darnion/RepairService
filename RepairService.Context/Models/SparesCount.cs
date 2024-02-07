@@ -9,8 +9,8 @@ namespace RepairService.Context.Models
         [Required]
         public int Count { get; set; }
         public int SparesTypeId { get; set; }
-        public SparesType SparesType { get; set; }
-        public ICollection<Report> Reports { get; set; }
+        public virtual SparesType SparesType { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
         public SparesCount()
         {
             Reports = new HashSet<Report>();

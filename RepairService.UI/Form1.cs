@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using RepairService.Context;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace RepairService.UI
 {
@@ -7,6 +9,11 @@ namespace RepairService.UI
         public Form1()
         {
             InitializeComponent();
+            using (var db = new RepairServiceDbContext())
+            {
+                dataGridView1.AutoGenerateColumns= false;
+                dataGridView1.DataSource = db.Users.ToList(); 
+            }
         }
     }
 }

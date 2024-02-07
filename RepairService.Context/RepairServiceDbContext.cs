@@ -28,7 +28,16 @@ namespace RepairService.Context
                 .HasMany(x => x.OrderWorkers)
                 .WithMany(x => x.Workers);
 
-            
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.OrderClients)
+                .WithRequired(x => x.Client)
+                .WillCascadeOnDelete(false);
+
+
+
+
+
         }
     }
 }

@@ -43,7 +43,7 @@
                         Status_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Users", t => t.ClientId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.ClientId)
                 .ForeignKey("dbo.Equipments", t => t.EquipmentId, cascadeDelete: true)
                 .ForeignKey("dbo.TypeBrokens", t => t.TypeBrokenId, cascadeDelete: true)
                 .ForeignKey("dbo.Status", t => t.Status_Id)
@@ -131,6 +131,19 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.UserOrders",
+                c => new
+                    {
+                        User_Id = c.Int(nullable: false),
+                        Order_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.User_Id, t.Order_Id })
+                .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Orders", t => t.Order_Id, cascadeDelete: true)
+                .Index(t => t.User_Id)
+                .Index(t => t.Order_Id);
+            
+            CreateTable(
                 "dbo.SparesCountReports",
                 c => new
                     {
@@ -143,26 +156,11 @@
                 .Index(t => t.SparesCount_Id)
                 .Index(t => t.Report_Id);
             
-            CreateTable(
-                "dbo.OrderUsers",
-                c => new
-                    {
-                        Order_Id = c.Int(nullable: false),
-                        User_Id = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Order_Id, t.User_Id })
-                .ForeignKey("dbo.Orders", t => t.Order_Id, cascadeDelete: true)
-                .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
-                .Index(t => t.Order_Id)
-                .Index(t => t.User_Id);
-            
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.Orders", "Status_Id", "dbo.Status");
-            DropForeignKey("dbo.OrderUsers", "User_Id", "dbo.Users");
-            DropForeignKey("dbo.OrderUsers", "Order_Id", "dbo.Orders");
             DropForeignKey("dbo.Orders", "TypeBrokenId", "dbo.TypeBrokens");
             DropForeignKey("dbo.SparesCounts", "SparesTypeId", "dbo.SparesTypes");
             DropForeignKey("dbo.SparesCountReports", "Report_Id", "dbo.Reports");
@@ -170,12 +168,14 @@
             DropForeignKey("dbo.Reports", "OrderId", "dbo.Orders");
             DropForeignKey("dbo.Orders", "EquipmentId", "dbo.Equipments");
             DropForeignKey("dbo.Users", "RoleId", "dbo.Roles");
+            DropForeignKey("dbo.UserOrders", "Order_Id", "dbo.Orders");
+            DropForeignKey("dbo.UserOrders", "User_Id", "dbo.Users");
             DropForeignKey("dbo.Orders", "ClientId", "dbo.Users");
             DropForeignKey("dbo.Equipments", "EquipmentTypeId", "dbo.EquipmentTypes");
-            DropIndex("dbo.OrderUsers", new[] { "User_Id" });
-            DropIndex("dbo.OrderUsers", new[] { "Order_Id" });
             DropIndex("dbo.SparesCountReports", new[] { "Report_Id" });
             DropIndex("dbo.SparesCountReports", new[] { "SparesCount_Id" });
+            DropIndex("dbo.UserOrders", new[] { "Order_Id" });
+            DropIndex("dbo.UserOrders", new[] { "User_Id" });
             DropIndex("dbo.SparesCounts", new[] { "SparesTypeId" });
             DropIndex("dbo.Reports", new[] { "OrderId" });
             DropIndex("dbo.Users", new[] { "RoleId" });
@@ -184,8 +184,8 @@
             DropIndex("dbo.Orders", new[] { "EquipmentId" });
             DropIndex("dbo.Orders", new[] { "ClientId" });
             DropIndex("dbo.Equipments", new[] { "EquipmentTypeId" });
-            DropTable("dbo.OrderUsers");
             DropTable("dbo.SparesCountReports");
+            DropTable("dbo.UserOrders");
             DropTable("dbo.Status");
             DropTable("dbo.TypeBrokens");
             DropTable("dbo.SparesTypes");

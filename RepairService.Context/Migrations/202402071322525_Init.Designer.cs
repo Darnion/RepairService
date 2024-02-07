@@ -13,7 +13,7 @@ namespace RepairService.Context.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202402071251271_Init"; }
+            get { return "202402071322525_Init"; }
         }
         
         string IMigrationMetadata.Source

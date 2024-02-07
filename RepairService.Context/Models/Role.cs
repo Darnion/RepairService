@@ -8,6 +8,6 @@ namespace RepairService.Context.Models
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
-        public ICollection<User> Users { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
